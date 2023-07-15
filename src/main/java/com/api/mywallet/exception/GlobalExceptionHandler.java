@@ -31,4 +31,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>("User already exists", HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleResourceNotFoundException(NotFoundException e) {
+        return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+    }
+
 }
