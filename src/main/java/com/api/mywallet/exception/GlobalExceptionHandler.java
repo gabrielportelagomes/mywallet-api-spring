@@ -33,7 +33,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> handleResourceNotFoundException(NotFoundException e) {
-        return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Not found", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<String> handleForbiddenException(ForbiddenException e) {
+        return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
     }
 
 }
