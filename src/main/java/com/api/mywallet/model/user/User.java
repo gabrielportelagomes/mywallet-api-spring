@@ -26,6 +26,8 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
 
+    private String name;
+
     private String password;
 
     private UserRole role;
@@ -33,7 +35,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<FinancialRecord> records;
 
-    public User(String email, String password, UserRole role) {
+    public User(String name, String email, String password, UserRole role) {
+        this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
