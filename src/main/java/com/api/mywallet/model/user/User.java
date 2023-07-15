@@ -1,9 +1,7 @@
 package com.api.mywallet.model.user;
 
+import com.api.mywallet.model.record.FinancialRecord;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,6 +29,9 @@ public class User implements UserDetails {
     private String password;
 
     private UserRole role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<FinancialRecord> records;
 
     public User(String email, String password, UserRole role) {
         this.email = email;
