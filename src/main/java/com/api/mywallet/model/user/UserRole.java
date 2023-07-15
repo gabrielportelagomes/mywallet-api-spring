@@ -16,13 +16,4 @@ public enum UserRole {
         return role;
     }
 
-    @JsonCreator
-    public static UserRole fromString(String value) {
-        for (UserRole userRole : UserRole.values()) {
-            if (userRole.name().equalsIgnoreCase(value)) {
-                return userRole;
-            }
-        }
-        throw new IllegalArgumentException("Invalid role: " + value);
-    }
 }
