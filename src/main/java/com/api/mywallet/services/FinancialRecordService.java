@@ -1,5 +1,6 @@
 package com.api.mywallet.services;
 
+import com.api.mywallet.exception.ForbiddenException;
 import com.api.mywallet.exception.NotFoundException;
 import com.api.mywallet.model.record.FinancialRecord;
 import com.api.mywallet.model.record.FinancialRecordDTO;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class FinancialRecordService {
@@ -26,7 +28,7 @@ public class FinancialRecordService {
         String email = authentication.getName();
         User user = (User) userRepository.findByEmail(email);
 
-        if(user == null) {
+        if (user == null) {
             throw new NotFoundException("User not found");
         }
 
@@ -40,11 +42,31 @@ public class FinancialRecordService {
         String email = authentication.getName();
         User user = (User) userRepository.findByEmail(email);
 
-        if(user == null) {
+        if (user == null) {
             throw new NotFoundException("User not found");
         }
 
         FinancialRecord financialRecord = new FinancialRecord(data.value(), data.description(), data.category(), user);
         financialRecordRepository.save(financialRecord);
+    }
+
+    public void deleteFinancialRecord(UUID id, Authentication authentication) {
+        String email = authentication.getName();
+        User user = (User) userRepository.findByEmail(email);
+
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+
+        FinancialRecord financialRecord = financialRecordRepository.findById(id).orElseThrow(() -> {
+            throw new NotFoundException("Record not found");
+        });
+
+        if (!financialRecord.getUser().getId().equals(user.getId())) {
+            throw new ForbiddenException("Forbidden");
+        }
+
+
+        financialRecordRepository.deleteById(id);
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin("*")
@@ -32,5 +33,12 @@ public class FinancialRecordController {
         service.createFinancialRecord(data, authentication);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteFinancialRecord(@PathVariable UUID id, Authentication authentication) {
+        service.deleteFinancialRecord(id, authentication);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
