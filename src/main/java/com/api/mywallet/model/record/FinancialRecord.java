@@ -1,6 +1,7 @@
 package com.api.mywallet.model.record;
 
 import com.api.mywallet.model.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,6 +32,7 @@ public class FinancialRecord {
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
