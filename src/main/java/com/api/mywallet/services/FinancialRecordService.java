@@ -4,6 +4,7 @@ import com.api.mywallet.exception.ForbiddenException;
 import com.api.mywallet.exception.NotFoundException;
 import com.api.mywallet.model.record.FinancialRecord;
 import com.api.mywallet.model.record.FinancialRecordDTO;
+import com.api.mywallet.model.record.UpdateFinancialRecordDTO;
 import com.api.mywallet.model.user.User;
 import com.api.mywallet.repositories.FinancialRecordRepository;
 import com.api.mywallet.repositories.UserRepository;
@@ -68,5 +69,31 @@ public class FinancialRecordService {
 
 
         financialRecordRepository.deleteById(id);
+    }
+
+    public void updateFinancialRecord(UUID id, UpdateFinancialRecordDTO data, Authentication authentication) {
+        String email = authentication.getName();
+        User user = (User) userRepository.findByEmail(email);
+
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+
+        FinancialRecord financialRecord = financialRecordRepository.findById(id).orElseThrow(() -> {
+            throw new NotFoundException("Record not found");
+        });
+
+        if (!financialRecord.getUser().getId().equals(user.getId())) {
+            throw new ForbiddenException("Forbidden");
+        }
+
+        if (data.value() != null) {
+            financialRecord.setValue(data.value());
+        }
+        if (data.description() != null) {
+            financialRecord.setDescription(data.description());
+        }
+
+        financialRecordRepository.save(financialRecord);
     }
 }

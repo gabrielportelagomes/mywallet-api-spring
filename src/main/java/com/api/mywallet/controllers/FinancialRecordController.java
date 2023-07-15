@@ -2,6 +2,7 @@ package com.api.mywallet.controllers;
 
 import com.api.mywallet.model.record.FinancialRecord;
 import com.api.mywallet.model.record.FinancialRecordDTO;
+import com.api.mywallet.model.record.UpdateFinancialRecordDTO;
 import com.api.mywallet.services.FinancialRecordService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,13 @@ public class FinancialRecordController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteFinancialRecord(@PathVariable UUID id, Authentication authentication) {
         service.deleteFinancialRecord(id, authentication);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity updateFinancialRecord(@PathVariable UUID id, @RequestBody @Valid UpdateFinancialRecordDTO data, Authentication authentication) {
+        service.updateFinancialRecord(id, data, authentication);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
